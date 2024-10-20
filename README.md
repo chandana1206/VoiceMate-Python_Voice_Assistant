@@ -1,5 +1,5 @@
-# Voice_Assistant
 # Python Voice Assistant
+VOICEMATE: A VOICE ASSISTANT USING PYTHON
 
 A simple voice assistant built with Python that can perform basic tasks such as greeting the user, telling the time and date, searching Wikipedia, and answering computational questions using WolframAlpha.
 
