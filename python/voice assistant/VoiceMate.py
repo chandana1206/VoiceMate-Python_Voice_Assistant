@@ -174,7 +174,7 @@ def handleCommand(query):
             exit()
 
     elif 'exit' in query or 'stop' in query or 'bye' in query:
-            speak("Bye. See you later!!!")
+            speak("Bye. See you later!!")
             exit()
     else:
         speak("I'm sorry, I can't do that yet.")
