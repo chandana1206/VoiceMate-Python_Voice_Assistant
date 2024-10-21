@@ -179,8 +179,6 @@ def handleCommand(query):
     else:
         speak("I'm sorry, I can't do that yet.")
 
-
-
 if __name__ == "__main__":
 
     clear = lambda: os.system('cls')
