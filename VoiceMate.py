@@ -47,7 +47,7 @@ def speak(audio):
     print(audio)
     engine.runAndWait()
 
-assname =("Phoebe")
+assname =("Voice Mate")
 
 def takeCommand():
     r = sr.Recognizer()  
@@ -163,7 +163,7 @@ def handleCommand(query):
         speak("It's good to hear that.")
         how_are_you=False
     
-    elif "what's your name" in query or "who are you" in query:
+    elif " your name" in query or "who are you" in query:
             speak(f"My name is {assname}. I am your voice assistant.")
 
     elif 'joke' in query:
@@ -179,15 +179,13 @@ def handleCommand(query):
     else:
         speak("I'm sorry, I can't do that yet.")
 
-
-
 if __name__ == "__main__":
 
     clear = lambda: os.system('cls')
      
     clear()
     wishMe()
-    speak("Hello! I am your voice assistant. How can I help you today?")
+    speak("I am your voice assistant. How can I help you today?")
     
     while True:
         query = takeCommand()
