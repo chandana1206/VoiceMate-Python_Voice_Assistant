@@ -163,7 +163,7 @@ def handleCommand(query):
         speak("It's good to hear that.")
         how_are_you=False
     
-    elif " your name" in query or "who are you" in query:
+    elif "your name" in query or "who are you" in query:
             speak(f"My name is {assname}. I am your voice assistant.")
 
     elif 'joke' in query:
