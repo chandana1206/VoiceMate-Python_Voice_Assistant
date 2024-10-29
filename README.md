@@ -10,7 +10,11 @@ A simple voice assistant built with Python that can perform basic tasks such as 
 - Provide the current time and date.
 - Search and summarize information from Wikipedia.
 - Answer computational or factual questions using WolframAlpha.
-- Open Google in the web browser via voice command.
+- Open websites in the web browser via voice command.
+- Get the top news.
+- Send an email.
+- Get the current weather accurately.
+- Translate sentences to different languages.
 
 ## Setup Instructions
 
