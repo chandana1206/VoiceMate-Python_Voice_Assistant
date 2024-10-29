@@ -24,6 +24,8 @@ from ecapture import ecapture as ec
 from bs4 import BeautifulSoup
 import win32com.client as wincl
 from urllib.request import urlopen
+from googletrans import Translator
+
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -32,9 +34,9 @@ engine.setProperty('voice', voices[1].id)
 
 def wishMe():
     hour = int(time.strftime("%H"))
-    if 0 <= hour < 12:
+    if hour < 12:
         greeting = "Good Morning!"
-    elif 12 <= hour < 18:
+    elif 12 <= hour < 17:
         greeting = "Good Afternoon!"
     else:
         greeting = "Good Evening!"
@@ -67,20 +69,24 @@ def takeCommand():
     return query
 
 def getWeather(city):
-    api_key = '41cb32ec6904a65c1cb44e865234e40f'  
-    base_url = "http://api.openweathermap.org/data/2.5/weather?"
-    complete_url = f"{base_url}q={city}&appid={api_key}&units=metric"
-    
-    response = requests.get(complete_url)
-    data = response.json()
-    
-    if data['cod'] == 200:
-        main = data['main']
-        weather_desc = data['weather'][0]['description']
-        temp = main['temp']
-        speak(f"The temperature in {city} is {temp} degrees Celsius with {weather_desc}.")
-    else:
-        speak("City not found. Please check the name and try again.")
+    try:
+        api_key = '41cb32ec6904a65c1cb44e865234e40f'
+        base_url = "http://api.openweathermap.org/data/2.5/weather?"
+        complete_url = f"{base_url}q={city}&appid={api_key}&units=metric"
+        
+        response = requests.get(complete_url)
+        data = response.json()
+
+        if data.get("cod") == 200:
+            main = data['main']
+            weather_desc = data['weather'][0]['description']
+            temp = main['temp']
+            speak(f"The temperature in {city} is {temp} degrees Celsius with {weather_desc}.")
+        else:
+            speak("City not found. Please check the name and try again.")
+    except Exception as e:
+        speak("Sorry, I couldn't fetch the weather information at the moment.")
+        print("Weather Error:", e)
 
 def sendEmail(to, content):
     try:
@@ -99,6 +105,28 @@ def sendEmail(to, content):
         print(e)
         return False
 
+def getNews():
+    api_key = "825734b0b3fd4001b4d0fddea99f87dd"
+    url = f"http://newsapi.org/v2/top-headlines?country=in&apiKey={api_key}"
+    response = requests.get(url).json()
+    
+    if response["status"] == "ok":
+        articles = response["articles"][:5] 
+        speak("Here are the top news headlines.")
+        for article in articles:
+            speak(article["title"])
+    else:
+        speak("Sorry, I couldn't fetch the news at the moment.")
+
+def translateText(text, target_language="en"):
+    translator = Translator()
+    try:
+        translated = translator.translate(text, dest=target_language)
+        speak(f"The translation is: {translated.text}")
+    except Exception as e:
+        speak("I'm sorry, I couldn't translate the text.")
+
+
 how_are_you=False
 
 def handleCommand(query):
@@ -107,9 +135,15 @@ def handleCommand(query):
     if 'wikipedia' in query:
         speak("Searching Wikipedia...")
         query = query.replace("wikipedia", "")
-        results = wikipedia.summary(query, sentences=2)  
-        speak("According to Wikipedia")
-        speak(results)
+        try:
+            results = wikipedia.summary(query, sentences=2)
+            speak("According to Wikipedia")
+            speak(results)
+        except wikipedia.exceptions.DisambiguationError:
+            speak("There are multiple results for that query. Please be more specific.")
+        except wikipedia.exceptions.PageError:
+            speak("I couldn't find a matching page on Wikipedia.")
+
 
     elif 'open youtube' in query:
         speak("Opening YouTube")
@@ -168,6 +202,21 @@ def handleCommand(query):
 
     elif 'joke' in query:
             speak(pyjokes.get_joke())
+    
+    elif 'translate' in query:
+        speak("What would you like me to translate?")
+        text = takeCommand()
+        if text:
+            speak("Which language should I translate it to?")
+            target_language = takeCommand().lower()
+            lang_code = {
+                "spanish": "es", "french": "fr", "german": "de",
+                "hindi": "hi", "japanese": "ja", "english": "en"
+            }.get(target_language, "en") 
+            translateText(text, lang_code)
+    
+    elif 'news' in query:
+        getNews()
 
     elif 'thanks' in query or 'thank you' in query :
             speak("You are welcome!")
@@ -178,6 +227,8 @@ def handleCommand(query):
             exit()
     else:
         speak("I'm sorry, I can't do that yet.")
+        
+    speak("What else can I do for you?")
 
 
 if __name__ == "__main__":
