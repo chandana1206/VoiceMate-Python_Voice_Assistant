@@ -16,8 +16,6 @@ A simple voice assistant built with Python that can perform basic tasks such as 
 - Get the current weather accurately.
 - Translate sentences to different languages.
 
-## Setup Instructions
-
 ### Prerequisites
 
 Make sure you have Python 3.x installed on your system. You will also need the following Python libraries:
@@ -28,7 +26,3 @@ Make sure you have Python 3.x installed on your system. You will also need the f
 - `wolframalpha`
 - `webbrowser`
 
-You can install these libraries using `pip`:
-
-```bash
-pip install SpeechRecognition pyttsx3 wikipedia wolframalpha
